@@ -26,8 +26,7 @@ document.getElementById('score-1').textContent = '0';
 document.getElementById('current-0').textContent = '0';
 document.getElementById('current-1').textContent = '0';
 
-// 2 Ways of working with Events and functions
-//document.querySelector('.btn-roll').addEventListener('click', btn); EXTERNAL FUNCTION EXAMPLE
+// | -- EVENT LISTENER -- |  - Button Roll. Events when rolling the dice
 document.querySelector('.btn-roll').addEventListener('click', function() {
     // Do Something Here .. | ANONYMOUS FUNCTION
 
@@ -41,8 +40,57 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
 
 
     // Update the round score IF The rolled number was not a 1
-
+    if (dice !== 1 ) {
+        // Add Score
+        roundScore += dice;
+        document.querySelector('#current-' + activePlayer).textContent = roundScore;
+    } else {
+        // Change Player
+        nextPlayer();
+    }
 });
+
+// -- EVENT LISTENER -- | - Button Hold. Holds the score.
+document.querySelector('.btn-hold').addEventListener('click', function() {
+
+    // Add CURRENT score to GLOBAL score
+    scores[activePlayer] += roundScore;
+
+    // Update the UI
+    document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
+
+    // Check if Player did won the game
+    if (scores[activePlayer] >= 100) {
+        document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
+        document.querySelector('.dice').style.display = 'none';
+        document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
+        document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
+    } else {
+        // Change Player (If got 1, or picked hold)
+        nextPlayer();
+    }
+});
+
+// -- FUNCTION -- | Changing The Player
+function nextPlayer() {
+
+    // Change Player
+    activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
+    roundScore = 0;
+
+    // Sets score back to 0 if dice rolls 1 in UI
+    document.getElementById('current-0').textContent = '0';
+    document.getElementById('current-1').textContent = '0';
+
+    // Change Player Active Status > Using Toggle Property
+    document.querySelector('.player-0-panel').classList.toggle('active');
+    document.querySelector('.player-1-panel').classList.toggle('active');
+    /*document.querySelector('.player-0-panel').classList.remove('active');
+    document.querySelector('.player-1-panel').classList.add('active');*/
+
+    // Removes Dice IMG when dice hits 1
+    diceDOM.style.display = 'none';
+}
 
 
 // --- FOR LATER USAGE --- \\
