@@ -45,7 +45,27 @@ body {
     padding: 100px;
 }
 
+.win-field {
 
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 520px;
+    color: #555;
+    font-size: 1.8rem;
+    font-family: 'Lato';
+    text-align: center;
+    padding: 1rem;
+    width: 16rem;
+    text-transform: uppercase;
+}
+
+.win-field:focus {
+    outline: none;
+}
+
+#dice-1 { top: 120px; }
+#dice-2 { top: 250px; }
 
 /**********************************************
 *** PLAYERS

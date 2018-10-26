@@ -15,6 +15,9 @@ var scores, roundScore, activePlayer, gamePlaying;
 // Variable Initalizations
 init(); // scores, roundScore, activePlayer.
 
+// Last Dice Variable
+var lastDice;
+
 // | -- EVENT LISTENER | ROLLING THE DICE -- |  - Button Roll. Events when rolling the dice \\
 document.querySelector('.btn-roll').addEventListener('click', function() {
     // Do Something Here .. | ANONYMOUS FUNCTION
@@ -23,23 +26,32 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
     if (gamePlaying) {
 
         // Get Random Number
-        var dice =  Math.floor(Math.random() * 6) + 1;  // Declared inside of the function as its not needed in global scope
+        var dice1 =  Math.floor(Math.random() * 6) + 1;  // Declared inside of the function as its not needed in global scope
+        var dice2 =  Math.floor(Math.random() * 6) + 1;  // Declared inside of the function as its not needed in global scope
 
         // Display the Dice Number
-        var diceDOM = document.querySelector('.dice');
-        diceDOM.style.display = 'block';
-        diceDOM.src = 'dice-' + dice + '.png';
+        document.getElementById('dice-1').style.display = 'block';
+        document.getElementById('dice-2').style.display = 'block';
+        document.getElementById('dice-1').src = 'dice-' + dice1 + '.png';
+        document.getElementById('dice-2').src = 'dice-' + dice2 + '.png';
 
-
+        // Check's if player did roll the 6 twice in the row
+        /*if (dice1 === 6 && dice2 === 6 && lastDice === 6) {
+            scores[activePlayer] = 0;
+            document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
+            nextPlayer(); */
         // Update the round score IF The rolled number was not a 1
-        if (dice !== 1 ) {
+        if (dice1 !== 1 && dice2 !== 1 ) {
             // Add Score
-            roundScore += dice;
+            roundScore += dice1 + dice2;
             document.querySelector('#current-' + activePlayer).textContent = roundScore;
         } else {
-            // Change Player
+            // Next Player
             nextPlayer();
         }
+
+        // Sets lastDice variable to dice
+        lastDice = dice1;
     }
 });
 
@@ -55,10 +67,21 @@ document.querySelector('.btn-hold').addEventListener('click', function() {
         // Update the UI
         document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
 
+        // Score Set Setup
+        var input = document.getElementById('winScore').value;
+        var winningScore = input;
+
+        if (input) {
+            winningScore = input;
+        } else {
+            winningScore = 100;
+        }
+
         // Check if Player did won the game
-        if (scores[activePlayer] >= 20) {
+        if (scores[activePlayer] >= winningScore) {
             document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
-            document.querySelector('.dice').style.display = 'none';
+            document.getElementById('dice-1').style.display = 'none';
+            document.getElementById('dice-2').style.display = 'none';
             document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
             document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
             gamePlaying = false;    // End the game
@@ -90,7 +113,8 @@ function nextPlayer() {
     document.querySelector('.player-1-panel').classList.add('active');*/
 
     // Removes Dice IMG when dice hits 1
-    diceDOM.style.display = 'none';
+    document.getElementById('dice-1').style.display = 'none';
+    document.getElementById('dice-2').style.display = 'none';
 }
 
 //  -- FUNCTION -- | Initiliaze New Game
@@ -105,7 +129,8 @@ function init() {
     roundScore = 0;
 
     // Hides DICE Image at the begining of the game
-    document.querySelector('.dice').style.display = 'none';
+    document.getElementById('dice-1').style.display = 'none';
+    document.getElementById('dice-2').style.display = 'none';
 
     // Displays all the results as 0 at the beginning of the game.
     document.getElementById('score-0').textContent = '0';
